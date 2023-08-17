@@ -2,7 +2,7 @@
 // Created by SRI VISHNU JSB on 8/16/2023.
 //
 /*
- * A task is assigned to some surveyors to store temparature in an array daily for 8 days.
+A task is assigned to some surveyors to store temparature in an array daily for 8 days.
 
 An array for storing temperature is used by the surveyor but they forget to insert one element at some positions. Index 0 1 2 3 4 5 6 7 Temp. 30 40 35 25 20 10 23
 
@@ -27,7 +27,24 @@ Temparature values must be an integer values. Capacity of an array to store is a
 Output Format
 
 Prints all the temperatures given in an array after inserting the temparature at given index position. Output is comma separated values where there is no comma after last element. If the position given is not in the array index range then display an error message "Invalid Position".
- */
+
+Sample Input 0
+
+30 40 35 25 20 10 23
+3
+15
+Sample Output 0
+
+30,40,35,15,25,20,10,23
+Sample Input 1
+
+5 15 20 23 34 45 45
+-1
+5
+Sample Output 1
+
+Invalid Position
+*/
 
 #include <stdio.h>
 #include <string.h>
