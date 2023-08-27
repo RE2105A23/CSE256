@@ -1,103 +1,81 @@
 #include <iostream>
 
-struct Node {
+struct SLLNode {
     int data;
-    Node* prev;
-    Node* next;
+    SLLNode* next;
+    SLLNode(int val) : data(val), next(nullptr) {}
 };
 
-class DoublyLinkedList {
-private:
-    Node* head;
-    Node* tail;
-
-public:
-    DoublyLinkedList() : head(nullptr), tail(nullptr) {}
-
-    void insert(int value) {
-        Node* newNode = new Node;
-        newNode->data = value;
-        newNode->prev = nullptr;
-        newNode->next = nullptr;
-
-        if (!head) {
-            head = newNode;
-            tail = newNode;
-        } else {
-            tail->next = newNode;
-            newNode->prev = tail;
-            tail = newNode;
-        }
+SLLNode* deleteNodeAtPosition(SLLNode* head, int position) {
+    if (!head) {
+        std::cout << "SLL is Empty" << std::endl;
+        return nullptr;
     }
 
-    void deleteLastOccurrence(int value) {
-        Node* current = tail;
-        while (current && current->data != value) {
-            current = current->prev;
-        }
-
-        if (current) {
-            if (current != tail) {
-                current->prev->next = current->next;
-            } else {
-                tail = current->prev;
-            }
-            if (current->next) {
-                current->next->prev = current->prev;
-            }
-            delete current;
-        }
+    if (position == 0) {
+        SLLNode* newHead = head->next;
+        delete head;
+        return newHead;
     }
 
-    void display() {
-        Node* current = head;
-        while (current) {
-            std::cout << current->data << " ";
-            current = current->next;
-        }
-        std::cout << std::endl;
+    SLLNode* current = head;
+    SLLNode* previous = nullptr;
+    int currentPosition = 0;
+
+    while (current && currentPosition != position) {
+        previous = current;
+        current = current->next;
+        currentPosition++;
     }
 
-    ~DoublyLinkedList() {
-        Node* current = head;
-        while (current) {
-            Node* temp = current;
-            current = current->next;
-            delete temp;
-        }
+    if (!current) {
+        std::cout << "Invalid Position" << std::endl;
+        exit(0);
     }
-};
+
+    previous->next = current->next;
+    delete current;
+    return head;
+}
+
+void printLinkedList(SLLNode* head) {
+    SLLNode* current = head;
+    while (current) {
+        std::cout << current->data << " ";
+        current = current->next;
+    }
+    std::cout << std::endl;
+}
 
 int main() {
-    int N;
-    std::cout << "Enter the value of N (2 < N <= 20): ";
-    std::cin >> N;
+    int n;
+    std::cin >> n;
 
-    if (N <= 2 || N > 20) {
-        std::cout << "Invalid input for N. Exiting." << std::endl;
-        return 1;
+    SLLNode* head = nullptr;
+    SLLNode* tail = nullptr;
+
+    for (int i = 0; i < n; ++i) {
+        int val;
+        std::cin >> val;
+        if (!head) {
+            head = new SLLNode(val);
+            tail = head;
+        } else {
+            tail->next = new SLLNode(val);
+            tail = tail->next;
+        }
     }
 
-    DoublyLinkedList list;
+    int position;
+    std::cin >> position;
 
-    for (int i = 0; i < N; ++i) {
-        int value;
-        std::cout << "Enter value " << i + 1 << ": ";
-        std::cin >> value;
-        list.insert(value);
+    head = deleteNodeAtPosition(head, position);
+
+    if (!head) {
+        std::cout << "SLL is Empty" << std::endl;
+    } else {
+        printLinkedList(head);
     }
-
-    std::cout << "Values in the list before deletion: ";
-    list.display();
-
-    int deleteValue;
-    std::cout << "Enter the value to delete: ";
-    std::cin >> deleteValue;
-
-    list.deleteLastOccurrence(deleteValue);
-
-    std::cout << "Values in the list after deletion: ";
-    list.display();
 
     return 0;
 }
