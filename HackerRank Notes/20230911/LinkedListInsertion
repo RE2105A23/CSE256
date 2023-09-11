@@ -1,0 +1,145 @@
+/*
+After discussing the concepts of One-way Linked List, Professor Samuel asked his students to implement a function for inserting a node in the singly linked list such that the charcters present in the linked list nodes follow the given condition:
+
+A vowel must not be present adjacent to another vowel
+3 consecutive consonants must not be there in the list
+Students were supposed to implement a function to insert the node with given charater in the very first suitable position of the list.
+
+Example: C -> B -> E -> K -> A
+
+Now If the character X is to be inserted in the list then, it must be inserted between E and K.
+
+C -> B -> E -> X -> K -> A
+
+In the above example, if A is to be inserted then, It can be inserted in the beginning only.
+
+A -> C -> B -> E -> K -> A
+
+If there is no suitable position available then print Can't be inserted
+
+Input Format
+
+First line contains the total number of nodes in the list and second line contains the characters present on those nodes.
+
+Third line contains the Character to be inserted.
+
+5
+P A G E K
+S
+
+Constraints
+
+All the characters in the node are in UPPERCASE.
+
+Output Format
+
+Prints all the Characters of the linked list (seperated by SPACE) after insertion
+
+S P A G E K
+
+Sample Input 0
+
+5
+A C P O T
+B
+Sample Output 0
+
+B A C P O T
+*/
+#include <cmath>
+#include <cstdio>
+#include <vector>
+#include <iostream>
+#include <algorithm>
+using namespace std;
+
+
+struct Node {
+    char data;
+    Node* next;
+};
+
+// Function to check if a character is a vowel
+bool isVowel(char c) {
+    return c == 'A' || c == 'E' || c == 'I' || c == 'O' || c == 'U';
+}
+
+// Function to insert the character at the appropriate position
+Node* insert(Node* head, char x) {
+    Node* newNode = new Node;
+    newNode->data = x;
+    newNode->next = nullptr;
+
+    if (!head) {
+        return newNode;
+    }
+
+    Node* prev = nullptr;
+    Node* current = head;
+
+    int consecutiveConsonants = isVowel(current->data) ? 0 : 1;
+
+    while (current && ((isVowel(current->data) && isVowel(x)) || (consecutiveConsonants == 2 && !isVowel(x)))) {
+        prev = current;
+        current = current->next;
+
+        if (current && !isVowel(current->data)) {
+            consecutiveConsonants++;
+        } else {
+            consecutiveConsonants = 0;
+        }
+    }
+
+    if (!current && consecutiveConsonants == 2 && !isVowel(x)) {
+        cout << "Can't be inserted" << endl;
+        return head;
+    }
+
+    newNode->next = current;
+
+    if (prev) {
+        prev->next = newNode;
+    } else {
+        head = newNode;
+    }
+
+    return head;
+}
+
+int main() {
+    /* Enter your code here. Read input from STDIN. Print output to STDOUT */   
+    
+    int n;
+    cin >> n;
+    
+    Node* head = nullptr;
+    Node* tail = nullptr;
+
+    for (int i = 0; i < n; i++) {
+        char data;
+        cin >> data;
+        Node* newNode = new Node;
+        newNode->data = data;
+        newNode->next = nullptr;
+
+        if (!head) {
+            head = newNode;
+            tail = newNode;
+        } else {
+            tail->next = newNode;
+            tail = newNode;
+        }
+    }
+
+    char x;
+    cin >> x;
+
+    head = insert(head, x);
+
+    Node* temp = head;
+    while (temp) {
+        cout << temp->data << " ";
+        temp = temp->next;
+    }
+    return 0;
+}
