@@ -72,7 +72,7 @@ int main() {
     int n;
     cin >> n;
 
-    if (n <= 0) {
+    if (n <= 0 || n> 10 ) {
         cout << "Not valid according to constraints" << endl;
         return 0;
     }
